@@ -32,21 +32,20 @@ class Main extends Component {
               className="mb-3"
               onSubmit={(event) => {
                 event.preventDefault();
-                this.props.changeToken("0xa36085F69e2889c224210F603D836748e7dC0088", "LINK", chainlink);
                 let amount;
                 amount = this.input.value.toString();
                 amount = window.web3.utils.toWei(amount, "Ether");
-                this.props.stakeTokens(amount, this.props.tokenAddress);
+                this.props.stakeTokens(amount, "0xa36085F69e2889c224210F603D836748e7dC0088");
               }}
             >
               <div>
                 <label className="float-left"> <b>Stake Link Tokens</b> &nbsp;&nbsp; <img src= {chainlink} height="32" alt="" /> </label>
                   <span className="float-right text-muted">
                   Link balance:
-                  &nbsp;&nbsp;&nbsp; {window.web3.utils.fromWei(this.props.erc20Balance, "Ether")} {" "}
+                  &nbsp;&nbsp;&nbsp; {window.web3.utils.fromWei(this.props.LinkBalance, "Ether")} {" "}
                   <br></br>
                   Staked amount:
-                  &nbsp;&nbsp;&nbsp; {window.web3.utils.fromWei(this.props.stakingBalance, "Ether")}{" "}
+                  &nbsp;&nbsp;&nbsp; {window.web3.utils.fromWei(this.props.LinkStakingBalance, "Ether")}{" "}
                   <br></br>
                   &nbsp;&nbsp;&nbsp;
                 </span>
@@ -75,8 +74,7 @@ class Main extends Component {
               className="btn btn-info btn-danger btn-sm"
               onClick={(event) => {
                 event.preventDefault();
-                this.props.changeToken("0xa36085F69e2889c224210F603D836748e7dC0088", "LINK", chainlink);
-                this.props.unstakeTokens(this.props.tokenAddress);
+                this.props.unstakeTokens("0xa36085F69e2889c224210F603D836748e7dC0088");
               }}
             >
               Unstake

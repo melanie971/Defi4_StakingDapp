@@ -3,12 +3,12 @@
 //const { expect } = require('chai');
 const { assert } = require("chai");
 
-// Load compiled artifacts
-const { LinkToken } = require('@chainlink/contracts/truffle/v0.4/LinkToken');
-const { Oracle } = require('@chainlink/contracts/truffle/v0.4/Oracle');
+// // Load compiled artifacts
+// const { LinkToken } = require('@chainlink/contracts/truffle/v0.4/LinkToken');
+// const { Oracle } = require('@chainlink/contracts/truffle/v0.4/Oracle');
 
-LinkToken.setProvider(provider);
-Oracle.setProvider(provider);
+// LinkToken.setProvider(provider);
+// Oracle.setProvider(provider);
 
 //Load my contracts
 const DappToken = artifacts.require("DappToken");
@@ -29,7 +29,7 @@ contract("TokenFarm", ([owner, investor]) => {
     // Load Contracts
     dappToken = await DappToken.new();
     tokenFarm = await TokenFarm.new(dappToken.address);
-    linkToken = await LinkToken.new({ from: creator });
+    //linkToken = await LinkToken.new({ from: creator });
 
     // Transfer all Dapp tokens to farm (1 million)
     await dappToken.transfer(tokenFarm.address, tokens("1000000"));

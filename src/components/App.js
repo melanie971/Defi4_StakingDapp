@@ -14,6 +14,7 @@ class App extends Component {
     await this.loadBlockchainData();
   }
 
+  //to be removed
   async changeToken(address, name, tokenImage) {
     await this.setState({ image: tokenImage });
     await this.setState({ tokenAddress: address });
@@ -21,6 +22,7 @@ class App extends Component {
     await this.updateBalance(address).then(this.render());
   }
 
+  //to be removed
   async updateBalance(address) {
     const web3 = window.web3;
     const erc20 = new web3.eth.Contract(ERC20.abi, this.state.tokenAddress);
@@ -30,6 +32,7 @@ class App extends Component {
     await this.updateStakingBalance();
   }
 
+  //to be keep
   async updateStakingBalance() {
     const web3 = window.web3;
     const networkId = await web3.eth.net.getId();
@@ -38,12 +41,14 @@ class App extends Component {
     let stakingBalance = await tokenFarm.methods
       .stakingBalance(this.state.tokenAddress, this.state.account)
       .call();
-    let tokenPriceInEth = await tokenFarm.methods
-      .getTokenEthPrice(this.state.tokenAddress)
-      .call();
 
+    let LinkStakingBalance = await tokenFarm.methods
+      .stakingBalance("0xa36085F69e2889c224210F603D836748e7dC0088", this.state.account)
+      .call();
+   
     this.setState({ stakingBalance: stakingBalance.toString() });
-    this.setState({ tokenPriceInEth: tokenPriceInEth.toString() });
+    this.setState({ LinkStakingBalance: LinkStakingBalance.toString() });
+   
   }
 
   async loadBlockchainData() {
@@ -62,6 +67,12 @@ class App extends Component {
     this.setState({ erc20 });
     let erc20Balance = await erc20.methods.balanceOf(this.state.account).call();
     this.setState({ erc20Balance: erc20Balance.toString() });
+
+    //Token balances
+    const erc20link = new web3.eth.Contract(ERC20.abi, "0xa36085F69e2889c224210F603D836748e7dC0088");
+    this.setState({ erc20link });
+    let LinkBalance = await erc20link.methods.balanceOf(this.state.account).call();
+    this.setState({ LinkBalance: LinkBalance.toString() });
 
     // Load DappToken
     const dappTokenData = DappToken.networks[networkId];
@@ -109,6 +120,7 @@ class App extends Component {
     }
   }
 
+
   stakeTokens = (amount, tokenAddress) => {
     this.setState({ loading: true });
     this.state.erc20.methods
@@ -153,8 +165,10 @@ class App extends Component {
       dappTokenAddress: "",
       tokenFarm: {},
       erc20Balance: "0",
+      LinkBalance: "0",
       dappTokenBalance: "0",
       stakingBalance: "0",
+      LinkStakingBalance: "0",
       loading: true,
       image: chainlink,
       tokenName: "LINK",
@@ -174,10 +188,12 @@ class App extends Component {
       content = (
         <Main
           erc20Balance={this.state.erc20Balance}
+          LinkBalance={this.state.LinkBalance}
           tokenPriceInEth={this.state.tokenPriceinEth}
           dappTokenBalance={this.state.dappTokenBalance}
           dappTokenAddress={this.state.dappTokenAddress}
           stakingBalance={this.state.stakingBalance}
+          LinkStakingBalance={this.state.LinkStakingBalance}
           stakeTokens={this.stakeTokens.bind(this)}
           unstakeTokens={this.unstakeTokens.bind(this)}
           tokenName={this.state.tokenName}
