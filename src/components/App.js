@@ -121,12 +121,16 @@ class App extends Component {
   }
 
 
+
   stakeTokens = (amount, tokenAddress) => {
     this.setState({ loading: true });
-    this.state.erc20.methods
+    const web3 = window.web3;
+    const custom_erc20 = new web3.eth.Contract(ERC20.abi, tokenAddress); 
+
+    custom_erc20.methods
       .approve(this.state.tokenFarm._address, amount)
       .send({ from: this.state.account })
-      .on("receipt", (r) => { // here in the original file it was .on(transactionHash)
+      .on("receipt", (r) => {               // here in the original file it was .on(transactionHash)
         this.state.tokenFarm.methods
           .stakeTokens(amount, tokenAddress)
           .send({ from: this.state.account })
@@ -161,6 +165,7 @@ class App extends Component {
     this.state = {
       account: "0x0",
       erc20: {},
+      erc20link: {},
       dappToken: {},
       dappTokenAddress: "",
       tokenFarm: {},
