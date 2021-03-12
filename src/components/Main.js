@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import chainlink from "../chainlink.png";
 import rewardToken from "../RewardTokenLogo.png";
+import weenus from "../WeenusFakeLogo.png";
+import xeenus from "../XeenusFakeLogo.png";
 
 class Main extends Component {
   render() {
@@ -81,6 +83,10 @@ class Main extends Component {
             </button>
           </div>
         </div>
+
+      
+      
+
       </div>
     );
   }

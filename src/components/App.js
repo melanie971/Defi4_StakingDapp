@@ -14,40 +14,25 @@ class App extends Component {
     await this.loadBlockchainData();
   }
 
-  //to be removed
-  async changeToken(address, name, tokenImage) {
-    await this.setState({ image: tokenImage });
-    await this.setState({ tokenAddress: address });
-    await this.setState({ tokenName: name });
-    await this.updateBalance(address).then(this.render());
-  }
+  //UpdatingStakingBalance
 
-  //to be removed
-  async updateBalance(address) {
-    const web3 = window.web3;
-    const erc20 = new web3.eth.Contract(ERC20.abi, this.state.tokenAddress);
-    await this.setState({ erc20 });
-    let erc20Balance = await erc20.methods.balanceOf(this.state.account).call();
-    await this.setState({ erc20Balance: erc20Balance.toString() });
-    await this.updateStakingBalance();
-  }
-
-  //to be keep
   async updateStakingBalance() {
     const web3 = window.web3;
     const networkId = await web3.eth.net.getId();
     const tokenFarmData = TokenFarm.networks[networkId];
     const tokenFarm = new web3.eth.Contract(TokenFarm.abi,tokenFarmData.address);
-    let stakingBalance = await tokenFarm.methods
-      .stakingBalance(this.state.tokenAddress, this.state.account)
-      .call();
-
+   
     let LinkStakingBalance = await tokenFarm.methods
       .stakingBalance("0xa36085F69e2889c224210F603D836748e7dC0088", this.state.account)
       .call();
+    
+    let WeenusStakingBalance = await tokenFarm.methods
+      .stakingBalance("0xaFF4481D10270F50f203E0763e2597776068CBc5", this.state.account)
+      .call();
+
    
-    this.setState({ stakingBalance: stakingBalance.toString() });
     this.setState({ LinkStakingBalance: LinkStakingBalance.toString() });
+    this.setState({ WeenusStakingBalance: WeenusStakingBalance.toString() });
    
   }
 
@@ -57,8 +42,6 @@ class App extends Component {
     const accounts = await web3.eth.getAccounts();
     this.setState({ account: accounts[0] });
     this.setState({ tokenAddress: "0xa36085F69e2889c224210F603D836748e7dC0088"});
-    this.setState({ image: chainlink });
-    this.setState({ tokenName: "LINK" });
 
     const networkId = await web3.eth.net.getId();
 
@@ -172,11 +155,9 @@ class App extends Component {
       erc20Balance: "0",
       LinkBalance: "0",
       dappTokenBalance: "0",
-      stakingBalance: "0",
       LinkStakingBalance: "0",
+      WeenusStakingBalance: "0",
       loading: true,
-      image: chainlink,
-      tokenName: "LINK",
       tokenPriceInEth: "0",
     };
   }
@@ -197,15 +178,11 @@ class App extends Component {
           tokenPriceInEth={this.state.tokenPriceinEth}
           dappTokenBalance={this.state.dappTokenBalance}
           dappTokenAddress={this.state.dappTokenAddress}
-          stakingBalance={this.state.stakingBalance}
           LinkStakingBalance={this.state.LinkStakingBalance}
+          WeenusStakingBalance={this.state.WeenusStakingBalance}
           stakeTokens={this.stakeTokens.bind(this)}
           unstakeTokens={this.unstakeTokens.bind(this)}
-          tokenName={this.state.tokenName}
-          image={this.state.image}
           tokenAddress={this.state.tokenAddress}
-          changeToken={this.changeToken.bind(this)}
-          updateBalance={this.updateBalance.bind(this)}
             
 
         />
