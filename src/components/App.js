@@ -8,6 +8,8 @@ import Main from "./Main";
 import "./App.css";
 import chainlink from "../chainlink.png";
 
+//need to care for balances calcul
+
 class App extends Component {
   async componentWillMount() {
     await this.loadWeb3();
@@ -56,6 +58,12 @@ class App extends Component {
     this.setState({ erc20link });
     let LinkBalance = await erc20link.methods.balanceOf(this.state.account).call();
     this.setState({ LinkBalance: LinkBalance.toString() });
+
+    //Weenus balance
+    const erc20weenus = new web3.eth.Contract(ERC20.abi, "0xaFF4481D10270F50f203E0763e2597776068CBc5");
+    this.setState({ erc20weenus });
+    let WeenusBalance = await erc20weenus.methods.balanceOf(this.state.account).call();
+    this.setState({ WeenusBalance: WeenusBalance.toString() });
 
     // Load DappToken
     const dappTokenData = DappToken.networks[networkId];
@@ -149,11 +157,13 @@ class App extends Component {
       account: "0x0",
       erc20: {},
       erc20link: {},
+      erc20weenus: {},
       dappToken: {},
       dappTokenAddress: "",
       tokenFarm: {},
       erc20Balance: "0",
       LinkBalance: "0",
+      WeenusBalance: "0",
       dappTokenBalance: "0",
       LinkStakingBalance: "0",
       WeenusStakingBalance: "0",
@@ -175,6 +185,7 @@ class App extends Component {
         <Main
           erc20Balance={this.state.erc20Balance}
           LinkBalance={this.state.LinkBalance}
+          WeenusBalance={this.state.WeenusBalance}
           tokenPriceInEth={this.state.tokenPriceinEth}
           dappTokenBalance={this.state.dappTokenBalance}
           dappTokenAddress={this.state.dappTokenAddress}
