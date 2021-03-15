@@ -58,6 +58,7 @@ class Main extends Component {
                 <input
                   type="text"
                   ref={(input) => {this.input = input;}}
+                  defaultValue = "10"
                   className="form-control form-control-lg"
                   placeholder="0"
                   required
@@ -114,6 +115,7 @@ class Main extends Component {
               <input
                 type="text"
                 ref={(input) => {this.input = input;}}
+                defaultValue = "10"
                 className="form-control form-control-lg"
                 placeholder="0"
                 required
