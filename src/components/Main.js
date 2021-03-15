@@ -29,7 +29,7 @@ class Main extends Component {
         </table>
 
         <div className="card mb-4" style={{border: '1px solid rgba(0,0,250,23'}}>
-          <div className="card-body">
+            <div className="card-body">
             <form
               className="mb-3"
               onSubmit={(event) => {
@@ -84,7 +84,61 @@ class Main extends Component {
           </div>
         </div>
 
-      
+        <div className="card mb-4" style={{border: '1px solid rgba(0,0,250,23'}}>
+        <div className="card-body">
+          <form
+            className="mb-3"
+            onSubmit={(event) => {
+              event.preventDefault();
+              let amount2;
+              amount2 = this.input.value.toString();
+              amount2 = window.web3.utils.toWei(amount2, "Ether");
+              this.props.stakeTokens(amount2, "0xaFF4481D10270F50f203E0763e2597776068CBc5");
+            }}
+          >
+            <div>
+              <label className="float-left"> <b>Stake Weenus Tokens</b> &nbsp;&nbsp; <img src= {weenus} height="32" alt="" /> </label>
+                <span className="float-right text-muted">
+                Weenus balance:
+                &nbsp;&nbsp;&nbsp; {window.web3.utils.fromWei(this.props.WeenusBalance, "Ether")} {" "}
+                <br></br>
+                Staked amount:
+                &nbsp;&nbsp;&nbsp; {window.web3.utils.fromWei(this.props.WeenusStakingBalance, "Ether")}{" "}
+                <br></br>
+                &nbsp;&nbsp;&nbsp;
+              </span>
+              
+              
+            </div>
+            <div className="input-group mb-4">
+              <input
+                type="text"
+                ref={(input) => {this.input = input;}}
+                className="form-control form-control-lg"
+                placeholder="0"
+                required
+              />
+              <div className="input-group-append">
+              <button type="submit" className="btn btn-success btn-block btn-lg">
+              Stake!
+              </button>
+
+              </div>
+            </div>
+                          
+          </form>
+          <button
+            type="submit"
+            className="btn btn-info btn-danger btn-sm"
+            onClick={(event) => {
+              event.preventDefault();
+              this.props.unstakeTokens("0xaFF4481D10270F50f203E0763e2597776068CBc5");
+            }}
+          >
+            Unstake
+          </button>
+        </div>
+      </div>
       
 
       </div>

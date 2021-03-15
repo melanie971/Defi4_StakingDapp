@@ -50,8 +50,8 @@ class App extends Component {
     // Load LINK as the starting default Token Data
     const erc20 = new web3.eth.Contract(ERC20.abi, this.state.tokenAddress);
     this.setState({ erc20 });
-    let erc20Balance = await erc20.methods.balanceOf(this.state.account).call();
-    this.setState({ erc20Balance: erc20Balance.toString() });
+    // let erc20Balance = await erc20.methods.balanceOf(this.state.account).call();
+    // this.setState({ erc20Balance: erc20Balance.toString() });
 
     //Token balances
     const erc20link = new web3.eth.Contract(ERC20.abi, "0xa36085F69e2889c224210F603D836748e7dC0088");
@@ -161,7 +161,7 @@ class App extends Component {
       dappToken: {},
       dappTokenAddress: "",
       tokenFarm: {},
-      erc20Balance: "0",
+      //erc20Balance: "0",
       LinkBalance: "0",
       WeenusBalance: "0",
       dappTokenBalance: "0",
@@ -183,7 +183,7 @@ class App extends Component {
     } else {
       content = (
         <Main
-          erc20Balance={this.state.erc20Balance}
+          //erc20Balance={this.state.erc20Balance}
           LinkBalance={this.state.LinkBalance}
           WeenusBalance={this.state.WeenusBalance}
           tokenPriceInEth={this.state.tokenPriceinEth}
