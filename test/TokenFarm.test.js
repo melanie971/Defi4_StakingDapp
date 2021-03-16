@@ -1,10 +1,10 @@
 // Load dependencies
 //const { accounts, contract, provider } = require('@openzeppelin/test-environment');
 //const { expect } = require('chai');
-const { assert } = require("chai");
+// const { assert } = require("chai");
 
 // // Load compiled artifacts
-// const { LinkToken } = require('@chainlink/contracts/truffle/v0.4/LinkToken');
+const { LinkToken } = require('@chainlink/contracts/truffle/v0.4/LinkToken');
 // const { Oracle } = require('@chainlink/contracts/truffle/v0.4/Oracle');
 
 // LinkToken.setProvider(provider);
@@ -29,7 +29,7 @@ contract("TokenFarm", ([owner, investor]) => {
     // Load Contracts
     dappToken = await DappToken.new();
     tokenFarm = await TokenFarm.new(dappToken.address);
-    //linkToken = await LinkToken.new({ from: creator });
+    linkToken = await LinkToken.new();
 
     // Transfer all Dapp tokens to farm (1 million)
     await dappToken.transfer(tokenFarm.address, tokens("1000000"));

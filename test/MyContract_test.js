@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { oracle } = require('@chainlink/test-helpers')
-const { expectRevert, time } = require('@openzeppelin/test-helpers')
+//const { oracle } = require('@chainlink/test-helpers')
+const { expectRevert, time } = require('@openzeppelin/test-helpers') //https://github.com/OpenZeppelin/openzeppelin-test-helpers/blob/master/README.md
 
 contract('MyContract', accounts => {
   const { LinkToken } = require('@chainlink/contracts/truffle/v0.4/LinkToken')
@@ -24,8 +24,7 @@ contract('MyContract', accounts => {
   // For the latest JobIDs, visit a node listing service like:
   // https://market.link/
   const jobId = web3.utils.toHex('4c7b7ffb66b344fbaa64995af81e355a')
-  const url =
-    'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD,EUR,JPY'
+  const url = 'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD,EUR,JPY'
   const path = 'USD'
   const times = 100
 

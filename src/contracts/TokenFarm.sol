@@ -6,6 +6,13 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 
+// // for testing on remix
+// import "https://github.com/OpenZeppelin/openzeppelin-contracts/contracts/math/SafeMath.sol";
+// import "https://github.com/OpenZeppelin/openzeppelin-contracts/contracts/access/Ownable.sol";
+// import "https://github.com/OpenZeppelin/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
+// import "https://github.com/smartcontractkit/chainlink/evm-contracts/src/v0.6/ChainlinkClient.sol";
+// import "https://github.com/smartcontractkit/chainlink/evm-contracts/src/v0.6/interfaces/AggregatorV3Interface.sol";
+
 // already used in Chainlink so no need to add them?
 // import "@openzeppelin/contracts/utils/Address.sol";
 // import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
@@ -21,6 +28,7 @@ contract TokenFarm is ChainlinkClient, Ownable {
     address[] allowedTokens;
     // token > address
     mapping(address => mapping(address => uint256)) public stakingBalance;
+    mapping(address => mapping(address => uint256)) public stakingBlockNumber;//Block number of last staking
     mapping(address => uint256) public uniqueTokensStaked;
     mapping(address => address) public tokenPriceFeedMapping; //tokens -> Ethereum price feed, à remplir par l'admin. address token => address price feed here:https://docs.chain.link/docs/ethereum-addresses
     
@@ -55,7 +63,11 @@ contract TokenFarm is ChainlinkClient, Ownable {
 
             //update staking balance
             stakingBalance[token][msg.sender] = stakingBalance[token][msg.sender].add(_amount);
-                        
+            
+            //here add staking block number in order to calculate self reward
+            //each time a user stake, it's only the last staking "time"(block) which is taken into account
+            stakingBlockNumber[token][msg.sender] = block.number;
+
             //add user to stakers array only if they haven't staked already
             if (uniqueTokensStaked[msg.sender] == 1) {
                 stakers.push(msg.sender);
@@ -94,6 +106,7 @@ contract TokenFarm is ChainlinkClient, Ownable {
         return false;
          }
 
+    // For issuing reward token
     // Calculating the user reward according to its staked amount and  to the value of each staked tokens relative to real eth price
     // First we need for each token to return its price in eth (that prices vary a lot so we need an oracle to connect us to real price)
 
@@ -140,7 +153,7 @@ contract TokenFarm is ChainlinkClient, Ownable {
     }
 
 
-    // Calculating reward for each user and Issuing Reward Tokens
+    // Calculating reward for each user and Issuing Reward Tokens according to actual ether price
     function issueTokens() public onlyOwner {
         // Issue tokens to all stakers ..looping throughout all stakers
         for (
@@ -155,7 +168,15 @@ contract TokenFarm is ChainlinkClient, Ownable {
         }
     }
 
+    //Calculating self-reward according to ether price and amount of time the tokens has been staked
+    function selfRewardCoef(address token) public view returns (uint256) {
+        uint256 rewardcoef = 0;
+        //for each token calculate coefficient according to block number differences
+        //uint256 deltaBlockNumber = block.number to be completed
+        return uint256(rewardcoef);
+    }
 
+    //Updating Unique tokens staked
     function updateUniqueTokensStaked(address user, address token) internal {
         if (stakingBalance[token][user] <= 0) {
             //uniqueTokensStaked[user] = uniqueTokensStaked[user] + 1;
