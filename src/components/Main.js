@@ -49,7 +49,7 @@ class Main extends Component {
                   Staked amount:
                   &nbsp;&nbsp;&nbsp; {window.web3.utils.fromWei(this.props.LinkStakingBalance, "Ether")}{" "}
                   <br></br>
-                  &nbsp;&nbsp;&nbsp;
+                  
                 </span>
                 
                 
@@ -142,8 +142,10 @@ class Main extends Component {
         </div>
       </div>
       
-
+      
       </div>
+
+      
     );
   }
 }

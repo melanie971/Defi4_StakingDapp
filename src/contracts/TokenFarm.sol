@@ -4,6 +4,7 @@ import "@chainlink/contracts/src/v0.6/interfaces/AggregatorV3Interface.sol";
 import "@chainlink/contracts/src/v0.6/ChainlinkClient.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
 
 // already used in Chainlink so no need to add them?
 // import "@openzeppelin/contracts/utils/Address.sol";
@@ -52,8 +53,8 @@ contract TokenFarm is ChainlinkClient, Ownable {
             IERC20(token).transferFrom(msg.sender, address(this), _amount);
 
             //update staking balance
-            stakingBalance[token][msg.sender] = stakingBalance[token][msg.sender] + _amount;
-            
+            stakingBalance[token][msg.sender] = stakingBalance[token][msg.sender].add(_amount);
+                        
             //add user to stakers array only if they haven't staked already
             if (uniqueTokensStaked[msg.sender] == 1) {
                 stakers.push(msg.sender);
@@ -73,7 +74,8 @@ contract TokenFarm is ChainlinkClient, Ownable {
         //reset staking balance
         stakingBalance[token][msg.sender] = 0;
         //update tokens staked status
-        uniqueTokensStaked[msg.sender] = uniqueTokensStaked[msg.sender] - 1;
+        uniqueTokensStaked[msg.sender] = uniqueTokensStaked[msg.sender].sub(1);
+        
     }
 
 
@@ -119,7 +121,8 @@ contract TokenFarm is ChainlinkClient, Ownable {
             return 0;
         }
         return 
-        (stakingBalance[token][user] * getTokenEthPrice(token)) / (10**18);
+        //(stakingBalance[token][user] * getTokenEthPrice(token)) / (10**18);
+        (stakingBalance[token][user].mul(getTokenEthPrice(token))).div(10**18);
     }
 
     //3. Getting User Total Value (i.e. all staked tokens) in Ether for each user
@@ -128,7 +131,8 @@ contract TokenFarm is ChainlinkClient, Ownable {
         uint256 totalValue = 0;
         if (uniqueTokensStaked[user] > 0) {
             for ( uint256 allowedTokensIndex = 0; allowedTokensIndex < allowedTokens.length; allowedTokensIndex++) {
-                totalValue = totalValue + getUserStakingBalanceEthValue(user, allowedTokens[allowedTokensIndex]);
+                //totalValue = totalValue + getUserStakingBalanceEthValue(user, allowedTokens[allowedTokensIndex]);
+                totalValue = totalValue.add(getUserStakingBalanceEthValue(user, allowedTokens[allowedTokensIndex]));
             }
         }
         return totalValue;
@@ -153,7 +157,8 @@ contract TokenFarm is ChainlinkClient, Ownable {
 
     function updateUniqueTokensStaked(address user, address token) internal {
         if (stakingBalance[token][user] <= 0) {
-            uniqueTokensStaked[user] = uniqueTokensStaked[user] + 1;
+            //uniqueTokensStaked[user] = uniqueTokensStaked[user] + 1;
+            uniqueTokensStaked[user] = uniqueTokensStaked[user].add(1);
         }
     }
 

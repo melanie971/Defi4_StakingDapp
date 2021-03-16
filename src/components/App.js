@@ -85,10 +85,7 @@ class App extends Component {
     // Load TokenFarm
     const tokenFarmData = TokenFarm.networks[networkId];
     if (tokenFarmData) {
-      const tokenFarm = new web3.eth.Contract(
-        TokenFarm.abi,
-        tokenFarmData.address
-      );
+      const tokenFarm = new web3.eth.Contract(TokenFarm.abi, tokenFarmData.address);
       this.setState({ tokenFarm });
       this.updateStakingBalance();
     } else {
@@ -141,16 +138,6 @@ class App extends Component {
       });
   };
 
-  tokenPriceInEther = (address) => {
-    this.setState({loading: true});
-    this.state.tokenFarm.methods
-    .getTokenEthPrice(address)
-    .send({ from: this.state.account })
-    .on("transactionHash", (hash) => {
-      this.setState({ loading: false });
-    });
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -168,7 +155,6 @@ class App extends Component {
       LinkStakingBalance: "0",
       WeenusStakingBalance: "0",
       loading: true,
-      tokenPriceInEth: "0",
     };
   }
 
@@ -186,7 +172,6 @@ class App extends Component {
           //erc20Balance={this.state.erc20Balance}
           LinkBalance={this.state.LinkBalance}
           WeenusBalance={this.state.WeenusBalance}
-          tokenPriceInEth={this.state.tokenPriceinEth}
           dappTokenBalance={this.state.dappTokenBalance}
           dappTokenAddress={this.state.dappTokenAddress}
           LinkStakingBalance={this.state.LinkStakingBalance}
