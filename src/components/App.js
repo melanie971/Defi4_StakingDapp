@@ -44,8 +44,10 @@ class App extends Component {
     const accounts = await web3.eth.getAccounts();
     this.setState({ account: accounts[0] });
     this.setState({ tokenAddress: "0xa36085F69e2889c224210F603D836748e7dC0088"});
-
     const networkId = await web3.eth.net.getId();
+
+    let blocknumber = await web3.eth.getBlockNumber();
+    this.setState({ lastblocknumber: blocknumber});
 
     // Load LINK as the starting default Token Data
     const erc20 = new web3.eth.Contract(ERC20.abi, this.state.tokenAddress);
@@ -138,10 +140,12 @@ class App extends Component {
       });
   };
 
+  
   constructor(props) {
     super(props);
     this.state = {
       account: "0x0",
+      lastblocknumber: "0",
       erc20: {},
       erc20link: {},
       erc20weenus: {},
@@ -174,6 +178,7 @@ class App extends Component {
           WeenusBalance={this.state.WeenusBalance}
           dappTokenBalance={this.state.dappTokenBalance}
           dappTokenAddress={this.state.dappTokenAddress}
+          lastblocknumber={this.state.lastblocknumber}
           LinkStakingBalance={this.state.LinkStakingBalance}
           WeenusStakingBalance={this.state.WeenusStakingBalance}
           stakeTokens={this.stakeTokens.bind(this)}
@@ -201,7 +206,6 @@ class App extends Component {
                   target="_blank"
                   rel="noopener noreferrer"
                 ></a>
-
                 {content}
               </div>
             </main>

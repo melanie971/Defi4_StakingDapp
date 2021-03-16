@@ -143,6 +143,8 @@ class Main extends Component {
       </div>
       
       {console.log(this.props.dappTokenAddress)}
+      {console.log(this.props.lastblocknumber)}
+      
       </div>
 
       
