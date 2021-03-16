@@ -142,7 +142,7 @@ class Main extends Component {
         </div>
       </div>
       
-      
+      {console.log(this.props.dappTokenAddress)}
       </div>
 
       
