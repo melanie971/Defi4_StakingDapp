@@ -10,15 +10,15 @@ module.exports = {
       port: 7545,
       network_id: "*" // Match any network id
     },
-    // live: {
-    //   provider: () => {
-    //     return new HDWalletProvider(process.env.MNEMONIC, `https://kovan.infura.io/v3/${process.env.INFURA_ID}`)
-    //   },
-    //   network_id: '*',
-    //   // ~~Necessary due to https://github.com/trufflesuite/truffle/issues/1971~~
-    //   // Necessary due to https://github.com/trufflesuite/truffle/issues/3008
-    //   skipDryRun: true,
-    // },
+    live: {
+      provider: () => {
+        return new HDWalletProvider(`${process.env.MNEMONIC}`, `https://kovan.infura.io/v3/${process.env.INFURA_ID}`)
+      },
+      network_id: '*',
+      // ~~Necessary due to https://github.com/trufflesuite/truffle/issues/1971~~
+      // Necessary due to https://github.com/trufflesuite/truffle/issues/3008
+      skipDryRun: true,
+    },
     kovan: {
       provider: function() {
         return new HDWalletProvider(`${process.env.MNEMONIC}`, `https://kovan.infura.io/v3/${process.env.INFURA_ID}`)
