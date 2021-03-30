@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-//const { oracle } = require('@chainlink/test-helpers')
-const { expectRevert, time } = require('@openzeppelin/test-helpers') //https://github.com/OpenZeppelin/openzeppelin-test-helpers/blob/master/README.md
+const { oracle } = require('@chainlink/test-helpers')
+const { expectRevert, time } = require('@openzeppelin/test-helpers')
 
-contract('MyContract', accounts => {
+
+contract('TokenFarm', accounts => {
   const { LinkToken } = require('@chainlink/contracts/truffle/v0.4/LinkToken')
   const { Oracle } = require('@chainlink/contracts/truffle/v0.6/Oracle')
-  //const MyContract = artifacts.require('MyContract')
-
+ 
   const DappToken = artifacts.require("DappToken");
   const TokenFarm = artifacts.require("TokenFarm");
 
@@ -15,8 +15,8 @@ contract('MyContract', accounts => {
   const stranger = accounts[2]
   const consumer = accounts[3]
 
-  // LinkToken.setProvider(provider);
-  // Oracle.setProvider(provider);
+  LinkToken.web3.setProvider(provider);
+  Oracle.web3.setProvider(provider);
 
   // These parameters are used to validate the data was received
   // on the deployed oracle contract. The Job ID only represents

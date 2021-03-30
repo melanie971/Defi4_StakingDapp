@@ -21,7 +21,7 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 
 contract TokenFarm is ChainlinkClient, Ownable {
     string public name = "Dapp Token Farm";
-    using SafeMath for uint256;
+    using SafeMath for uint256; //compilation issue: version conflit between chainlink and ours: yarn add @chainlink/contracts
     IERC20 public dappToken;
 
     address[] public stakers;

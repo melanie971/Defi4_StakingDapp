@@ -6,7 +6,7 @@ const { expect } = require('chai');
 const { LinkToken } = require('@chainlink/contracts/truffle/v0.4/LinkToken');
 const { Oracle } = require('@chainlink/contracts/truffle/v0.4/Oracle');
 
-LinkToken.setProvider(provider);
+LinkToken.setProvider('http://localhost:7545');
 Oracle.setProvider(provider);
 
 // Start test block

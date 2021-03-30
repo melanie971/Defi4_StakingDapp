@@ -1,10 +1,11 @@
 // Load dependencies
-//const { accounts, contract, provider } = require('@openzeppelin/test-environment');
+const { accounts, provider} = require('@openzeppelin/test-environment'); //contract, provider
 //const { expect } = require('chai');
-// const { assert } = require("chai");
+const { assert } = require("chai");
 
 // // Load compiled artifacts
 const { LinkToken } = require('@chainlink/contracts/truffle/v0.4/LinkToken');
+// const { provider } = require('@chainlink/test-helpers/dist/src/setup');
 // const { Oracle } = require('@chainlink/contracts/truffle/v0.4/Oracle');
 
 // LinkToken.setProvider(provider);
@@ -14,6 +15,9 @@ const { LinkToken } = require('@chainlink/contracts/truffle/v0.4/LinkToken');
 const DappToken = artifacts.require("DappToken");
 const TokenFarm = artifacts.require("TokenFarm");
 
+// LinkToken.web3.setProvider(provider);
+LinkToken.setProvider(provider);
+
 require("chai")
   .use(require("chai-as-promised"))
   .should();
@@ -22,30 +26,32 @@ function tokens(n) {
   return web3.utils.toWei(n, "ether");
 }
 
-contract("TokenFarm", ([owner, investor]) => {
+contract("TokenFarm", async accounts => { //  ([owner, investor])
   let dappToken, tokenFarm, linkToken;
+  const owner = accounts[0];
+  const investor = accounts[1];
 
-  beforeEach(async () => {
+  beforeEach('setup contracts for each test case', async () => {
     // Load Contracts
-    dappToken = await DappToken.new();
-    tokenFarm = await TokenFarm.new(dappToken.address);
-    linkToken = await LinkToken.new();
+    dappToken = await DappToken.new({from: owner});
+    tokenFarm = await TokenFarm.new(dappToken.address, {from: owner});
+    // linkToken = await LinkToken.new();
 
     // Transfer all Dapp tokens to farm (1 million)
-    await dappToken.transfer(tokenFarm.address, tokens("1000000"));
+    await dappToken.transfer(tokenFarm.address, tokens("1000000"), {from: owner});
 
     });
 
   describe("Dapp Token deployment", async () => {
     it("has a name", async () => {
-      const name = await dappToken.name();
+      const name = await dappToken.name({from: owner});
       assert.equal(name, "Reward Token");
     });
   });
 
   describe("Token Farm deployment", async () => {
     it("has a name", async () => {
-      const name = await tokenFarm.name();
+      const name = await tokenFarm.name({from: owner});
       assert.equal(name, "Dapp Token Farm");
     });
 
