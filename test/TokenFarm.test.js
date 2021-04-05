@@ -6,17 +6,15 @@ const { assert } = require("chai");
 // // Load compiled artifacts
 const { LinkToken } = require('@chainlink/contracts/truffle/v0.4/LinkToken');
 // const { provider } = require('@chainlink/test-helpers/dist/src/setup');
-// const { Oracle } = require('@chainlink/contracts/truffle/v0.4/Oracle');
+const { Oracle } = require('@chainlink/contracts/truffle/v0.4/Oracle');
 
-// LinkToken.setProvider(provider);
-// Oracle.setProvider(provider);
+LinkToken.setProvider(provider);
+Oracle.setProvider(provider);
 
 //Load my contracts
 const DappToken = artifacts.require("DappToken");
 const TokenFarm = artifacts.require("TokenFarm");
 
-// LinkToken.web3.setProvider(provider);
-LinkToken.setProvider(provider);
 
 require("chai")
   .use(require("chai-as-promised"))
@@ -27,15 +25,19 @@ function tokens(n) {
 }
 
 contract("TokenFarm", async accounts => { //  ([owner, investor])
-  let dappToken, tokenFarm, linkToken;
+  let dappToken, tokenFarm, linkToken, oc;
   const owner = accounts[0];
   const investor = accounts[1];
+  const [creator] = accounts;
 
   beforeEach('setup contracts for each test case', async () => {
     // Load Contracts
     dappToken = await DappToken.new({from: owner});
     tokenFarm = await TokenFarm.new(dappToken.address, {from: owner});
-    // linkToken = await LinkToken.new();
+    
+    // oc = await Oracle.new(link.address, {from: owner});
+    linkToken = await LinkToken.new({from: owner});
+   
 
     // Transfer all Dapp tokens to farm (1 million)
     await dappToken.transfer(tokenFarm.address, tokens("1000000"), {from: owner});
@@ -71,27 +73,24 @@ contract("TokenFarm", async accounts => { //  ([owner, investor])
   });
 
   // describe('Farming tokens', async () => {
-	// 	it('Fake tokens are staked', async () => {
-		
+	// 	it('Link tokens are staked', async () => {
+	
+  // Do we need this?
   //   // Allow staking LINK token - !!! need to transfer some first?
-  //   await tokenFarm.addAllowedTokens(linkToken.address, { from: owner });
+  //   await tokenFarm.addAllowedTokens(linkToken.address, {from: owner});
 
-  //   //
+  //   // setting PriceFeed ? à voir I don't remember
   //   await tokenFarm.setPriceFeedContract(linkToken.address,"0x3Af8C569ab77af5230596Acf0E8c2F9351d24C38", { from: owner });
 
-  //   // //This does not work
-  //   // let res;
-  //   // res = await tokenFarm.tokenIsAllowed(fakeToken.address);
-  //   // assert.equal(res[1], 'true', "Fake token is not allowed to be staked");
-    
-  //   //Stake Fake Tokens
-	// 	await fakeToken.approve(tokenFarm.address, tokens('75'), {from: investor});			
-	// 	await tokenFarm.stakeTokens(tokens('75'), fakeToken.address, {from: investor});
+      
+  ////Stake Link Token
+	// 	await linkToken.approve(tokenFarm.address, tokens('75'), {from: investor});			
+	// 	await tokenFarm.stakeTokens(tokens('75'), linkToken.address, {from: investor});
 
-  //   //Check staking result
-  //   let result;
-	// 	result = await fakeToken.balanceOf(investor);
-	// 	assert.equal(result.toString(), tokens('25'), 'investor Fake Token Wallet balance correct AFTER staking');
+  ////Check staking result
+  //  let result;
+	// 	result = await linkToken.balanceOf(investor);
+	// 	assert.equal(result.toString(), tokens('25'), 'investor Link Token Wallet balance correct AFTER staking');
 
 	// 	result = await fakeToken.balanceOf(tokenFarm.address);
 	// 	assert.equal(result.toString(), tokens('75'), 'Token Farm Fake Token balance correct AFTER staking');
